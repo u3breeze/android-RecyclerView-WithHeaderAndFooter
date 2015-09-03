@@ -42,7 +42,7 @@ class HFAdapter extends HFRecyclerViewAdapter<String>{
         }
     }
 }
-```java
+```
 
 ###  Step 2
 
@@ -61,7 +61,7 @@ hfAdapter.setHeaderView(headerView);
 //add footer
 View footerView = LayoutInflater.from(this).inflate(R.layout.footer, recyclerView, false);
 hfAdapter.setFooterView(footerView);
-```java
+```
 
 * for GridLayoutManager, should use setSpanSizeLookup to set header/footer's spanCount.
 
@@ -78,4 +78,4 @@ manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
         return 1;
     }
 });
-```java
+```
