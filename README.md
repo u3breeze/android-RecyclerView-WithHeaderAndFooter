@@ -61,13 +61,21 @@ hfAdapter.setHeaderView(headerView);
 //add footer
 View footerView = LayoutInflater.from(this).inflate(R.layout.footer, recyclerView, false);
 hfAdapter.setFooterView(footerView);
+
+//debug data
+ArrayList<String> data = new ArrayList<>();
+for (int i=0; i<8; i++){
+    data.add(String.format("Item %d", i));
+}
+hfAdapter.setData(data);
 ```
 
-* for GridLayoutManager, should use setSpanSizeLookup to set header/footer's spanCount.
+* For GridLayoutManager
 
 ```java
 final GridLayoutManager manager = new GridLayoutManager(this, 3);
 recyclerView.setLayoutManager(manager);
+//Set header/footer's spanCount to match horizontal of parent.
 manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
     @Override
     public int getSpanSize(int position) {
@@ -79,3 +87,5 @@ manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
     }
 });
 ```
+
+
