@@ -46,7 +46,7 @@ class HFAdapter extends HFRecyclerViewAdapter<String>{
 
 ###  Step 2
 
-* Use Adapter to make RecyclerView with header/footer.
+* Use Adapter to add header/footer for RecyclerView
 
 ```java
 RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
@@ -75,7 +75,7 @@ hfAdapter.setData(data);
 ```java
 final GridLayoutManager manager = new GridLayoutManager(this, 3);
 recyclerView.setLayoutManager(manager);
-//Set header/footer's spanCount to match horizontal of parent.
+//Set header/footer's spanCount to match parent in horizontal.
 manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
     @Override
     public int getSpanSize(int position) {
