@@ -11,7 +11,7 @@ import android.view.ViewGroup;
  *
  * Created by will on 15/9/2.
  */
-public abstract class HFRecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T>{
+public abstract class HFRecyclerViewAdapter<T, VH extends RecyclerView.ViewHolder> extends BaseRecyclerViewAdapter<T>{
 
     public HFRecyclerViewAdapter(Context context) {
         super(context);
@@ -30,11 +30,13 @@ public abstract class HFRecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T
     }
 
     public void setHeaderView(View header){
-        headerViewHolder = new HFViewHolder(header);
+        if (headerViewHolder == null || header != headerViewHolder.itemView)
+            headerViewHolder = new HFViewHolder(header);
     }
 
-    public void setFooterView(View header){
-        footerViewHolder = new HFViewHolder(header);
+    public void setFooterView(View foot){
+        if (footerViewHolder == null || foot != footerViewHolder.itemView)
+            footerViewHolder = new HFViewHolder(foot);
     }
 
     public void removeHeader(){
@@ -86,9 +88,8 @@ public abstract class HFRecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (!isHeader(position) && !isFooter(position)){
-            onBindDataItemViewHolder(holder, itemPositionInData(position));
-        }
+        if (!isHeader(position) && !isFooter(position))
+            onBindDataItemViewHolder((VH)holder, itemPositionInData(position));
     }
 
     @Override
@@ -140,9 +141,9 @@ public abstract class HFRecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T
         return footerViewHolder != null;
     }
 
-    public abstract RecyclerView.ViewHolder onCreateDataItemViewHolder(ViewGroup parent, int viewType);
+    public abstract VH onCreateDataItemViewHolder(ViewGroup parent, int viewType);
 
-    public abstract void onBindDataItemViewHolder(RecyclerView.ViewHolder holder, int position);
+    public abstract void onBindDataItemViewHolder(VH holder, int position);
 
 
 

@@ -66,22 +66,21 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Extends HFRecyclerViewAdapter to add Header/Footer view.
      */
-    class HFAdapter extends HFRecyclerViewAdapter<String>{
+    class HFAdapter extends HFRecyclerViewAdapter<String, HFAdapter.DataViewHolder>{
 
         public HFAdapter(Context context) {
             super(context);
         }
 
         @Override
-        public RecyclerView.ViewHolder onCreateDataItemViewHolder(ViewGroup parent, int viewType) {
+        public DataViewHolder onCreateDataItemViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.data_item, parent, false);
             return new DataViewHolder(v);
         }
 
         @Override
-        public void onBindDataItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-            DataViewHolder holder = (DataViewHolder)viewHolder;
+        public void onBindDataItemViewHolder(DataViewHolder holder, int position) {
             holder.itemTv.setText(getData().get(position));
         }
 
