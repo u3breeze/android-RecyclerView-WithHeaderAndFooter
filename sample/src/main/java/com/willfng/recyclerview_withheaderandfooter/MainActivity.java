@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
 
         // set Adapter
@@ -59,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
             data.add(String.format("Item %d", i));
         }
         hfAdapter.setData(data);
+
+
 
     }
 

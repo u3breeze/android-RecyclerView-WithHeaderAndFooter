@@ -70,6 +70,10 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
         notifyItemRemoved(position);
     }
 
+    protected void notifyMyItemChanged(int position){
+        notifyItemChanged(position);
+    }
+
     public interface OnItemClickLitener {
         void onItemClick(View view, int position);
     }

@@ -11,15 +11,15 @@ import android.view.ViewGroup;
  *
  * Created by will on 15/9/2.
  */
-public abstract class HFRecyclerViewAdapter<T, VH extends RecyclerView.ViewHolder> extends BaseRecyclerViewAdapter<T>{
+public abstract class HFRecyclerViewAdapter<T, VH extends RecyclerView.ViewHolder> extends BaseRecyclerViewAdapter<T> {
 
     public HFRecyclerViewAdapter(Context context) {
         super(context);
     }
 
-    private static final int TYPE_HEADER = Integer.MIN_VALUE;
-    private static final int TYPE_FOOTER = Integer.MIN_VALUE + 1;
-    private static final int TYPE_ADAPTEE_OFFSET = 2;
+    private static final int TYPE_HEADER = Integer.MAX_VALUE;
+    private static final int TYPE_FOOTER = Integer.MAX_VALUE - 1;
+    private static final int ITEM_MAX_TYPE = Integer.MAX_VALUE - 2;
     private RecyclerView.ViewHolder headerViewHolder;
     private RecyclerView.ViewHolder footerViewHolder;
 
@@ -30,13 +30,17 @@ public abstract class HFRecyclerViewAdapter<T, VH extends RecyclerView.ViewHolde
     }
 
     public void setHeaderView(View header){
-        if (headerViewHolder == null || header != headerViewHolder.itemView)
+        if (headerViewHolder == null || header != headerViewHolder.itemView) {
             headerViewHolder = new HFViewHolder(header);
+            notifyDataSetChanged();
+        }
     }
 
     public void setFooterView(View foot){
-        if (footerViewHolder == null || foot != footerViewHolder.itemView)
+        if (footerViewHolder == null || foot != footerViewHolder.itemView) {
             footerViewHolder = new HFViewHolder(foot);
+            notifyDataSetChanged();
+        }
     }
 
     public void removeHeader(){
@@ -77,20 +81,31 @@ public abstract class HFRecyclerViewAdapter<T, VH extends RecyclerView.ViewHolde
     }
 
     @Override
+    public void notifyMyItemChanged(int itemPosition) {
+        notifyItemChanged(itemPositionInRV(itemPosition));
+    }
+
+    @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_HEADER) {
             return headerViewHolder;
         } else if (viewType == TYPE_FOOTER) {
             return footerViewHolder;
         }
-        return onCreateDataItemViewHolder(parent, viewType - TYPE_ADAPTEE_OFFSET);
+        return onCreateDataItemViewHolder(parent, viewType);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (!isHeader(position) && !isFooter(position))
             onBindDataItemViewHolder((VH)holder, itemPositionInData(position));
+
+        if (isFooter(position)){
+            footerOnVisibleItem();
+        }
     }
+
+    public abstract void footerOnVisibleItem();
 
     @Override
     public int getItemCount() {
@@ -113,10 +128,10 @@ public abstract class HFRecyclerViewAdapter<T, VH extends RecyclerView.ViewHolde
             return TYPE_FOOTER;
         }
         int dataItemType = getDataItemType(itemPositionInData(position));
-        if (dataItemType >= Integer.MAX_VALUE - TYPE_ADAPTEE_OFFSET) {
-            throw new IllegalStateException("getDataItemType() must be less than (Integer.MAX_VALUE － " + TYPE_ADAPTEE_OFFSET + ").");
+        if (dataItemType > ITEM_MAX_TYPE) {
+            throw new IllegalStateException("getDataItemType() must be less than " + ITEM_MAX_TYPE + ".");
         }
-        return dataItemType + TYPE_ADAPTEE_OFFSET;
+        return dataItemType;
     }
 
     public int getDataItemCount() {
