@@ -15,33 +15,32 @@ Extension of RecyclerView.Adapter. Can add header/footer to RecyclerView for Lin
 * Create Adapter Class which extends HFRecyclerViewAdapter
 
 ```java
-class HFAdapter extends HFRecyclerViewAdapter<String>{
+   class HFAdapter extends HFRecyclerViewAdapter<String, HFAdapter.DataViewHolder>{
 
-    public HFAdapter(Context context) {
-        super(context);
-    }
+        public HFAdapter(Context context) {
+            super(context);
+        }
 
-    @Override
-    public RecyclerView.ViewHolder onCreateDataItemViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.data_item, parent, false);
-        return new DataViewHolder(v);
-    }
+        @Override
+        public DataViewHolder onCreateDataItemViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.data_item, parent, false);
+            return new DataViewHolder(v);
+        }
 
-    @Override
-    public void onBindDataItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        DataViewHolder holder = (DataViewHolder)viewHolder;
-        holder.itemTv.setText(getData().get(position));
-    }
+        @Override
+        public void onBindDataItemViewHolder(DataViewHolder holder, int position) {
+            holder.itemTv.setText(getData().get(position));
+        }
 
-    class DataViewHolder extends RecyclerView.ViewHolder{
-        TextView itemTv;
-        public DataViewHolder(View itemView) {
-            super(itemView);
-            itemTv = (TextView)itemView.findViewById(R.id.itemTv);
+        class DataViewHolder extends RecyclerView.ViewHolder{
+            TextView itemTv;
+            public DataViewHolder(View itemView) {
+                super(itemView);
+                itemTv = (TextView)itemView.findViewById(R.id.itemTv);
+            }
         }
     }
-}
 ```
 
 ###  Step 2
@@ -49,20 +48,23 @@ class HFAdapter extends HFRecyclerViewAdapter<String>{
 * Use Adapter to add header/footer for RecyclerView
 
 ```java
-RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
-recyclerView.setLayoutManager(new LinearLayoutManager(this));
 // set Adapter
 final HFAdapter hfAdapter = new HFAdapter(this);
 recyclerView.setAdapter(hfAdapter);
 
-//add header
+// add header
 View headerView = LayoutInflater.from(this).inflate(R.layout.header, recyclerView, false);
 hfAdapter.setHeaderView(headerView);
-//add footer
+// add footer
 View footerView = LayoutInflater.from(this).inflate(R.layout.footer, recyclerView, false);
 hfAdapter.setFooterView(footerView);
 
-//debug data
+// remove header
+hfAdapter.removeHeader();
+// remove footer
+hfAdapter.removeFooter();
+
+// set data
 ArrayList<String> data = new ArrayList<>();
 for (int i=0; i<8; i++){
     data.add(String.format("Item %d", i));
