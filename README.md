@@ -22,6 +22,14 @@ Extension of RecyclerView.Adapter. Can add header/footer to RecyclerView for Lin
         }
 
         @Override
+        public void footerOnVisibleItem() {
+            if(!isLoading){
+                // loading more data, when load done, should set isLoading to false.
+                //...
+                isLoading = true;
+            }
+        }
+        @Override
         public DataViewHolder onCreateDataItemViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.data_item, parent, false);
